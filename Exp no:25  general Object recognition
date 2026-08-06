@@ -1,16 +1,33 @@
-import cv2 
-# Load the pre-trained Haar cascade for watch detection 
-watch_cascade = cv2.CascadeClassifier("watch_cascade.xml")  # Use a pre-trained watch cascade XML 
-# Read the image 
-image = cv2.imread("watch.jpg") 
-# Convert the image to grayscale 
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) 
-# Detect watch in the image 
-watches = watch_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30)) 
-# Draw bounding boxes around detected watches 
-for (x, y, w, h) in watches: 
-cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2) 
-# Display the image with detections 
-cv2.imshow("Detected Watch", image) 
-cv2.waitKey(0) 
+import cv2
+import numpy as np
+
+# Read the input image
+image = cv2.imread("sample.png")  # Replace with your image file name
+
+# Check if the image is loaded
+if image is None:
+    print("Error: Image not found!")
+    exit()
+
+# Convert the image to grayscale
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# Apply Sobel filter in X direction
+sobel_x = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
+
+# Apply Sobel filter in Y direction
+sobel_y = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
+
+# Calculate the gradient magnitude
+sobel = cv2.magnitude(sobel_x, sobel_y)
+
+# Convert to 8-bit image
+sobel = cv2.convertScaleAbs(sobel)
+
+# Display the images
+cv2.imshow("Original Image", image)
+cv2.imshow("Grayscale Image", gray)
+cv2.imshow("Sobel Edge Detection", sobel)
+
+cv2.waitKey(0)
 cv2.destroyAllWindows()
