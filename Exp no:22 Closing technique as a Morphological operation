@@ -1,4 +1,3 @@
-PROGRAM: 
 import cv2 
 import numpy as np 
 image = cv2.imread('image.jpg')  # Replace 'image.jpg' with your image path 
